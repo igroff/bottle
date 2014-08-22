@@ -1,0 +1,9 @@
+{
+  "source": "DB/DB150/GLGLIVE/consult/CONSULTATAION",
+  "messageData" {
+    "type": "data_change",
+    "key": 388383
+  },
+  "objectData": { "this_is": "an object representation of the updated row from the table, which is, maybe, added as a convenience by the generator" },
+}
+
