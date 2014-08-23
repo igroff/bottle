@@ -11,4 +11,28 @@ function walkBack(){
   done
 }
 
-walkBack ${WALK_PATH}
+function findExecutablesOnPath(){
+  # starting at the bottom of a given path, returns any executables within
+  # the directories that comprise the path
+  # e.g.
+  # Running on a directory structure like this :
+  # root
+  #  |- file.exe
+  #  |- file.log
+  #  |- subdir
+  #     |- file.exe
+  #     |- file.log
+  #     |- subdir
+  #        |- file.log
+  # would return the following paths
+  #  root/file.exe
+  #  root/subdir/file.exe
+  #
+  CHECK_DIR=${1?No path provided to walk}
+  while [ -n "${CHECK_DIR}" -a "${CHECK_DIR}" != "/" -a "${CHECK_DIR}" != "." ]; do
+    find ${CHECK_DIR} -maxdepth 1 -depth -type f -executable
+    CHECK_DIR=$(dirname ${CHECK_DIR})
+  done
+}
+
+findExecutablesOnPath ${WALK_PATH}
