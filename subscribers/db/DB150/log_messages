@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+# by virtue of this file being executable it will be executed for each
+# message that comes down this path
+
+# The invocation of this will be analogous to :
+# echo "contents of message" | /full/path/to/this/file
+
