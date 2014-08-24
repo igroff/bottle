@@ -29,7 +29,7 @@ function findExecutablesOnPath(){
   #  root/subdir/file.exe
   #
   CHECK_DIR=${1?No path provided to walk}
-  while [ -n "${CHECK_DIR}" -a "${CHECK_DIR}" != "/" -a "${CHECK_DIR}" != "." ]; do
+  while [ -n "${CHECK_DIR}" -a "${CHECK_DIR}" != "/" -a "${CHECK_DIR}" != "." -a "${CHECK_DIR}" != ".." ]; do
     find ${CHECK_DIR} -maxdepth 1 -depth -type f -executable
     CHECK_DIR=$(dirname ${CHECK_DIR})
   done
