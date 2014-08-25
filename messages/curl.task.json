@@ -1,0 +1,6 @@
+{
+  "task": "curl",
+  "url" : "http://www.google.com/?q=pants",
+  "args": "--data 'name=any valid curl command line args'",
+  "body": {}
+}

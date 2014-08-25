@@ -13,5 +13,7 @@ as a map for what messages will be delivered where
 * destination - ultimately messages are routed by making a determination to which
   HTTP URL the message will be posted.  An URL that receives a POSTed message is
   a destination.
+* router - a system making decisions about what destinations will receive
+  particular messages.  
 
 

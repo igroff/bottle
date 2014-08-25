@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+# vim: ft=sh
+
+${AWS_CLI} send-message \
+  --queue-url https://sqs.us-east-1.amazonaws.com/868468680417/router \
+  --message-body '$(cat)'
+  
