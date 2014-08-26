@@ -44,6 +44,25 @@ SUBSCRIBER_PATH="${SUBSCRIBER_REPO_DIR}/${MESSAGE_SOURCE}"
 debug "subscriber path: ${SUBSCRIBER_PATH}"
 for subscriber in $(get_subscribers_for_message "${SUBSCRIBER_PATH}")
 do
+  debug "determining if subscriber ${subscriber} wants message"
+  debug "${MESSAGE_BODY}"
+  FILTER=$(cat ${subscriber} | jq ".filter")
+  if [ -n "${FILTER}" -a "${FILTER}" != "null" ]; then
+    debug "using filter ${FILTER}"
+    # if the subscriber has provided a filter, it must match or we will not
+    # send the message to the subscriber
+    CONTAINS=$(echo "${MESSAGE_BODY}" | jq "contains(${FILTER})")
+    if [ "true" == "${CONTAINS}" ]; then
+      # filter matches
+      debug "filter matches!"
+    else
+      # filter does not match
+      debug "filter doesn't match"
+    fi
+  else
+    # no filter, you get the message buddy
+    debug "no filter, subscriber ${subscriber} gets message"
+  fi
 done
 
 #eval ${AWS_CLI} sqs send-message --queue-url ${TASK_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'
