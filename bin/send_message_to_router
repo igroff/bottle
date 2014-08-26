@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 # vim: ft=sh
-
-${AWS_CLI} send-message \
-  --queue-url https://sqs.us-east-1.amazonaws.com/868468680417/router \
-  --message-body '$(cat)'
-  
+ROUTER_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/868468680417/router 
+# single quotes are perfectly valid JSON, but we're passing the JSON object to
+# our cli via '' quoted value, so we'll escape any single quotes
+MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
+eval ${AWS_CLI} sqs send-message --queue-url ${ROUTER_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'

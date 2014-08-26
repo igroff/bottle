@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+# vim: ft=sh
+RECEIPT_HANDLE=${1?You must provide a receipt handle for the message to delete}
+ROUTER_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/868468680417/router 
+${AWS_CLI} sqs \
+  delete-message \
+  --queue-url "${ROUTER_QUEUE_URL}" \
+  --receipt-handle "${RECEIPT_HANDLE}"
+DELETE_RESULT=$?
+if [ $DELETE_RESULT -ne 0 ]; then
+  echo "failed to delete message"
+  exit 1
+fi

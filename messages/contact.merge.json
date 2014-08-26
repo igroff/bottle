@@ -1,5 +1,6 @@
 {
   "source": "applications/merge/contact",
+  "id": "SOMEUNIQUESTRINGTYPETHING",
   "messageData": {
     "winningContactId": 383838,
     "mergedContactId" : 38827
