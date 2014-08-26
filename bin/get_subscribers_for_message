@@ -3,16 +3,8 @@
 
 WALK_PATH=${1?You need to provide a path to walk}
 
-function walkBack(){
-  CHECK_DIR=${1?No path provided to walk}
-  while [ -n "${CHECK_DIR}" -a "${CHECK_DIR}" != "/" -a "${CHECK_DIR}" != "." ]; do
-    echo ${CHECK_DIR}
-    CHECK_DIR=$(dirname ${CHECK_DIR})
-  done
-}
-
-function findExecutablesOnPath(){
-  # starting at the bottom of a given path, returns any executables within
+function findSubscriptionsOnPath(){
+  # starting at the bottom of a given path, returns any subscribers within
   # the directories that comprise the path
   # e.g.
   # Running on a directory structure like this :
@@ -29,10 +21,14 @@ function findExecutablesOnPath(){
   #  root/subdir/file.exe
   #
   CHECK_DIR=${1?No path provided to walk}
+  if [ ! -d ${CHECK_DIR} ]; then
+    echo "The path provided doesn't exist, there are no subscribers" >&2
+    exit 1
+  fi
   while [ -n "${CHECK_DIR}" -a "${CHECK_DIR}" != "/" -a "${CHECK_DIR}" != "." -a "${CHECK_DIR}" != ".." ]; do
-    find ${CHECK_DIR} -maxdepth 1 -depth -type f -executable
+    find ${CHECK_DIR} -maxdepth 1 -depth -type f -name '*.json'
     CHECK_DIR=$(dirname ${CHECK_DIR})
   done
 }
 
-findExecutablesOnPath ${WALK_PATH}
+findSubscriptionsOnPath ${WALK_PATH}

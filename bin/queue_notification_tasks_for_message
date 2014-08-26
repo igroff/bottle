@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+# vim: ft=sh
+
+##############################################################################
+# This is where all the action takes place, an inbound message is 
+# compared to our message routing rules and a series of notification
+# tasks is enqueued in the 'task' queue
+##############################################################################
+
+# expects
+SUBSCRIBER_REPO_URL=${SUBSCRIBER_REPO_URL?You need to provide a subscriber repo url}
+
+TASK_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/868468680417/tasks
+# single quotes are perfectly valid JSON, but we're passing the JSON object to
+# our cli via '' quoted value, so we'll escape any single quotes
+MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
+MESSAGE_SOURCE=$(echo "${MESSAGE_BODY}" | jq --raw-output ".source")
+get_subscribers_for_message "${MESSAGE_SOURCE}"
+
+#eval ${AWS_CLI} sqs send-message --queue-url ${TASK_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'
+
