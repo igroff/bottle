@@ -2,12 +2,6 @@
 # vim: ft=sh
 
 ##############################################################################
-# This is where all the action takes place, an inbound message is 
-# compared to our message routing rules and a series of notification
-# tasks is enqueued in the 'task' queue
-##############################################################################
-
-##############################################################################
 # This is a, theorectically, simple way to include other scripts ( via source )
 # in this one without having included files re-include the includes :)
 #
@@ -36,15 +30,4 @@ do
 done
 # end include processing
 
-# single quotes are perfectly valid JSON, but we're passing the JSON object to
-# our cli via '' quoted value, so we'll escape any single quotes
-MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
-MESSAGE_SOURCE=$(echo "${MESSAGE_BODY}" | jq --raw-output ".source")
-SUBSCRIBER_PATH="${SUBSCRIBER_REPO_DIR}/${MESSAGE_SOURCE}"
-debug "subscriber path: ${SUBSCRIBER_PATH}"
-for subscriber in $(get_subscribers_for_message "${SUBSCRIBER_PATH}")
-do
-done
-
-#eval ${AWS_CLI} sqs send-message --queue-url ${TASK_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'
-
+echo ${INCLUDE_LIST}

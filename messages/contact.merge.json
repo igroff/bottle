@@ -3,6 +3,7 @@
   "id": "SOMEUNIQUESTRINGTYPETHING",
   "messageData": {
     "winningContactId": 383838,
-    "mergedContactId" : 38827
+    "mergedContactId" : 38827,
+    "winningContactClientId": 1337
   }
 }
