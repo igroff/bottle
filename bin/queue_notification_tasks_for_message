@@ -44,14 +44,14 @@ SUBSCRIBER_PATH="${SUBSCRIBER_REPO_DIR}/${MESSAGE_SOURCE}"
 debug "subscriber path: ${SUBSCRIBER_PATH}"
 for subscriber in $(get_subscribers_for_message "${SUBSCRIBER_PATH}")
 do
-  debug "determining if subscriber ${subscriber} wants message"
+  debug "does subscriber ${subscriber} want message"
   debug "${MESSAGE_BODY}"
-  FILTER=$(cat ${subscriber} | jq ".filter")
+  FILTER=$(cat ${subscriber} | jq --raw-output ".filter")
   if [ -n "${FILTER}" -a "${FILTER}" != "null" ]; then
     debug "using filter ${FILTER}"
     # if the subscriber has provided a filter, it must match or we will not
     # send the message to the subscriber
-    CONTAINS=$(echo "${MESSAGE_BODY}" | jq "contains(${FILTER})")
+    CONTAINS=$(echo "${MESSAGE_BODY}" | jq ".messageData" | jq "contains(${FILTER})")
     if [ "true" == "${CONTAINS}" ]; then
       # filter matches
       debug "filter matches!"
