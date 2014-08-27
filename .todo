@@ -1,0 +1,1 @@
+ote_create_mutex needs to handle return like ote_lock_mutex

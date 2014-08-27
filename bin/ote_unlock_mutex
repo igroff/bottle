@@ -1,0 +1,45 @@
+#! /usr/bin/env bash
+# vim: ft=sh
+
+##############################################################################
+# This is a, theorectically, simple way to include other scripts ( via source )
+# in this one without having included files re-include the includes :)
+#
+# Any files in the directory where this script is running that match *.inc
+# will be in the order returned from the expansion of *.inc, so alphabetical
+# ordering.  Thus if you wish to control the order more explicitly you can
+# name your includes 01_*.inc, 02_*.inc and so on.
+##############################################################################
+# begin include processing
+MY_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export INCLUDE_LIST=${INCLUDE_LIST}
+for include in ${MY_DIR}/*.inc
+do
+  INCLUDE_KEY=INCLUDED_${include}
+  # if we find that our include key is _not_ already in our include list
+  # we'll perform the include
+  # this is done by removing $INCLUDE_KEY from $INCLUDE_LIST and comparing
+  # the resultant to INCLUDE_LIST, if equal, nothing has been removed and thus
+  # $INCLUDE_KEY is not in $INCLUDE_LIST
+  if [ "${INCLUDE_LIST//${INCLUDE_KEY}//}" == "${INCLUDE_LIST}" ]
+  then
+    [ -n "${DEBUG}" ] && echo "including file: ${include}" >&2
+    source ${include}
+    INCLUDE_LIST=${INCLUDE_LIST}:${INCLUDE_KEY}
+  fi
+done
+# end include processing
+
+LOCK_KEY=${1?You must provide lock key}
+CALLER_ID=$$_$(hostname)
+TIME=$(date +"%s")
+UNLOCK_OUTPUT=$(
+  ${AWS_CLI} dynamodb update-item \
+    --table-name ${OTE_LOCK_TABLE} \
+    --key '{"id":{"S":"'${LOCK_KEY}'"}}' \
+    --attribute-updates '{"locked":{"Value":{"N":"0"},  "Action":"PUT"}, "unlockTime":{"Value":{"N":"'${TIME}'"}, "Action":"PUT"}, "unlockedBy":{"Value":{"S":"'${CALLER_ID}'"}, "Action":"PUT"}}' \
+    --expected '{"locked":{"Value":{"N":"1"}, "ComparisonOperator": "EQ"}}' 2>&1
+)
+UNLOCK_RESULT=$?
+[ 0 -ne $UNLOCK_RESULT ] && die "${UNLOCK_OUTPUT}" ${UNLOCK_RESULT}
+exit $UNLOCK_RESULT
