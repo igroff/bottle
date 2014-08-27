@@ -44,3 +44,14 @@ as a map for what messages will be delivered where
 * `perform_task`
 * `archive_completed_task`
 * `delete_message_from_task_queue`
+
+# Task execution
+
+Task execution falls into two categories One Time Execution (OTE) and just plain execution. The processing flow of task execution looks something like this.
+* get task from task queue
+* if task is OTE lock task or bail
+* process task
+* if processed successfully, delete message
+*   if task is OTE mark task complete
+* if task is OTE unlock
+ 
