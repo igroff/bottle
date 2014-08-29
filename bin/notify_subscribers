@@ -30,30 +30,12 @@ do
 done
 # end include processing
 
-TASK=$(${AWS_CLI} sqs receive-message --wait-time-seconds 5 --queue-url ${TASK_QUEUE_URL})
+MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
 
-if [ -n "${TASK}" ]
-then
-  MESSAGE_COUNT=$(echo "${TASK}" | jq ".Messages | length")
-  if [ ${MESSAGE_COUNT} -eq 0 ]
-  then
-    # no messages received, nothing to do
-    debug "no task messages received, nothing to do"
-    exit 0
-  else
-    TEMP_FILE=$(mktemp -t bottle)
-    debug ${TASK}
-    echo "${TASK}" | jq --raw-output ".Messages[].Body" > ${TEMP_FILE}
-    RECEIPT_HANDLE=$(echo "${TASK}" | jq --raw-output ".Messages[].ReceiptHandle")
-    chmod +x ${TEMP_FILE}
-    debug "task saved as ${TEMP_FILE}"
-    ${TEMP_FILE}
-    TASK_RESULT=$?
-    if [ $TASK_RESULT -ne 0 ]
-    then
-      error "failure during task processing, will try again"
-    else
-      ${MY_DIR}/delete_message_from_task_queue "${RECEIPT_HANDLE}"
-    fi
-  fi
-fi
+for notifyUrl in $(echo "${MESSAGE_BODY}" | ${MY_DIR}/find_notify_urls_for_message)
+do
+  echo "${MESSAGE_BODY}" | ${MY_DIR}/enqueue_notify_task ${notifyUrl} 
+done
+
+
+

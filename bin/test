@@ -30,4 +30,3 @@ do
 done
 # end include processing
 
-echo ${INCLUDE_LIST}

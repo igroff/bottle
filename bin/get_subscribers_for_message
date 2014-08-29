@@ -51,7 +51,7 @@ function findSubscriptionsOnPath(){
   #
   CHECK_DIR=${1?No path provided to walk}
   if [ ! -d ${CHECK_DIR} ]; then
-    echo "The path provided doesn't exist, there are no subscribers" >&2
+    echo "The path provided (${CHECK_DIR}) doesn't exist, there are no subscribers" >&2
     exit 1
   fi
   while [ -n "${CHECK_DIR}" -a "${CHECK_DIR}" != "/" -a "${CHECK_DIR}" != "." -a "${CHECK_DIR}" != ".." ]; do

@@ -34,11 +34,8 @@ do
     INCLUDE_LIST=${INCLUDE_LIST}:${INCLUDE_KEY}
   fi
 done
-# end include processing
-# single quotes are perfectly valid JSON, but we're passing the JSON object to
-# our cli via '' quoted value, so we'll escape any single quotes
-MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
-MESSAGE_SOURCE=$(echo "${MESSAGE_BODY}" | jq --raw-output ".source")
+
+get_message_or_die
 SUBSCRIBER_PATH="${SUBSCRIBER_REPO_DIR}/${MESSAGE_SOURCE}"
 debug "subscriber path: ${SUBSCRIBER_PATH}"
 for subscriber in $(get_subscribers_for_message "${SUBSCRIBER_PATH}")
@@ -68,6 +65,3 @@ do
   fi
   [ "${SEND_MESSAGE}" == "true" ] && jq --raw-output ".notifyUrl" ${subscriber}
 done
-
-#eval ${AWS_CLI} sqs send-message --queue-url ${TASK_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'
-
