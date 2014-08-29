@@ -29,13 +29,3 @@ do
   fi
 done
 # end include processing
-
-TASK=$(${AWS_CLI} sqs receive-message --queue-url ${TASK_QUEUE_URL})
-
-if [ -n "${TASK}" ]
-then
-  TEMP_FILE=$(mktemp -t bottle)
-  echo $TASK | jq --raw-output ".Messages[].Body" > ${TEMP_FILE}
-  chmod +x ${TEMP_FILE}
-  ${TEMP_FILE}
-fi

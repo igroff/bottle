@@ -223,4 +223,3 @@ function find_a_hasher() {
 export -f find_a_hasher
 
 export UTILS_IMPORTED=1
-debug "utils imported"

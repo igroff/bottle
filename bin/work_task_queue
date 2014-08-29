@@ -30,15 +30,23 @@ do
 done
 # end include processing
 
-RECEIPT_HANDLE=${1?You must provide a receipt handle for the message to delete}
+TASK=$(${AWS_CLI} sqs receive-message --wait-time-seconds 5 --queue-url ${TASK_QUEUE_URL})
 
-debug "deleting task with receipt handle: " ${RECEIPT_HANDLE}
-${AWS_CLI} sqs \
-  delete-message \
-  --queue-url "${TASK_QUEUE_URL}" \
-  --receipt-handle "${RECEIPT_HANDLE}"
-DELETE_RESULT=$?
-if [ $DELETE_RESULT -ne 0 ]; then
-  echo "failed to delete message"
-  exit 1
+if [ -n "${TASK}" ]
+then
+  MESSAGE_COUNT=$(echo "${TASK}" | jq ".Messages | length")
+  if [ ${MESSAGE_COUNT} -eq 0 ]
+  then
+    # no messages received, nothing to do
+    debug "no task messages received, nothing to do"
+    exit 0
+  else
+    TEMP_FILE=$(mktemp -t bottle)
+    debug ${TASK}
+    echo "${TASK}" | jq --raw-output ".Messages[].Body" > ${TEMP_FILE}
+    RECEIPT_HANDLE=$(echo "${TASK}" | jq --raw-output ".Messages[].ReceiptHandle")
+    chmod +x ${TEMP_FILE}
+    ${TEMP_FILE}
+    ${MY_DIR}/delete_message_from_task_queue "${RECEIPT_HANDLE}"
+  fi
 fi

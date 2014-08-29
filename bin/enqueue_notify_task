@@ -30,15 +30,16 @@ do
 done
 # end include processing
 
-RECEIPT_HANDLE=${1?You must provide a receipt handle for the message to delete}
+NOTIFY_URL=${1?You must provide an URL to receive the message}
+# single quotes are perfectly valid JSON, but we're passing the JSON object to
+# our cli via '' quoted value, so we'll escape any single quotes
+MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
 
-debug "deleting task with receipt handle: " ${RECEIPT_HANDLE}
-${AWS_CLI} sqs \
-  delete-message \
-  --queue-url "${TASK_QUEUE_URL}" \
-  --receipt-handle "${RECEIPT_HANDLE}"
-DELETE_RESULT=$?
-if [ $DELETE_RESULT -ne 0 ]; then
-  echo "failed to delete message"
-  exit 1
-fi
+TASK=$(cat <<-EOF
+#! /usr/bin/env bash
+curl "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${MESSAGE_BODY}'
+EOF
+)
+${AWS_CLI} sqs send-message \
+   --queue-url ${TASK_QUEUE_URL} \
+   --message-body "${TASK}"

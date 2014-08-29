@@ -30,15 +30,7 @@ do
 done
 # end include processing
 
-RECEIPT_HANDLE=${1?You must provide a receipt handle for the message to delete}
-
-debug "deleting task with receipt handle: " ${RECEIPT_HANDLE}
-${AWS_CLI} sqs \
-  delete-message \
-  --queue-url "${TASK_QUEUE_URL}" \
-  --receipt-handle "${RECEIPT_HANDLE}"
-DELETE_RESULT=$?
-if [ $DELETE_RESULT -ne 0 ]; then
-  echo "failed to delete message"
-  exit 1
-fi
+MESSAGE_FILE=${1?You must provide a path to a message file}
+[ -r ${MESSAGE_FILE} ] || die "Unable to read message from ${MESSAGE_FILE}"
+MESSAGE_FILE=$(abspath $MESSAGE_FILE)
+cat ${MESSAGE_FILE} | ${MY_DIR}/format_message_from_stdin

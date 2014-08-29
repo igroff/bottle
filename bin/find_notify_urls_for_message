@@ -35,7 +35,6 @@ do
   fi
 done
 # end include processing
-
 # single quotes are perfectly valid JSON, but we're passing the JSON object to
 # our cli via '' quoted value, so we'll escape any single quotes
 MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
@@ -46,7 +45,10 @@ for subscriber in $(get_subscribers_for_message "${SUBSCRIBER_PATH}")
 do
   debug "does subscriber ${subscriber} want message"
   debug "${MESSAGE_BODY}"
+  SEND_MESSAGE=false
   FILTER=$(jq --raw-output ".match" ${subscriber})
+  # if the subscription defines a filter, we'll check to see if it matches
+  # the inbound message
   if [ -n "${FILTER}" -a "null" != "${FILTER}" ]; then
     debug "using filter ${FILTER}"
     # if the subscriber has provided a filter, it must match or we will not
@@ -54,7 +56,7 @@ do
     CONTAINS=$(echo "${MESSAGE_BODY}" | jq ".messageData | contains(${FILTER})")
     if [ "true" == "${CONTAINS}" ]; then
       # filter matches
-      jq --raw-output ".notifyUrl" ${subscriber}
+      SEND_MESSAGE=true
     else
       # filter does not match
       debug "filter doesn't match"
@@ -62,7 +64,9 @@ do
   else
     # no filter, you get the message buddy
     debug "no filter, subscriber ${subscriber} gets message"
+    SEND_MESSAGE=true
   fi
+  [ "${SEND_MESSAGE}" == "true" ] && jq --raw-output ".notifyUrl" ${subscriber}
 done
 
 #eval ${AWS_CLI} sqs send-message --queue-url ${TASK_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'
