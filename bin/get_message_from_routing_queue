@@ -30,4 +30,4 @@ do
 done
 # end include processing
 
-${AWS_CLI} sqs receive-message --queue-url ${ROUTER_QUEUE_URL}
+${AWS_CLI} sqs receive-message --wait-time-seconds ${QUEUE_POLL_DURATION} --queue-url ${ROUTER_QUEUE_URL}

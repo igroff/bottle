@@ -30,7 +30,7 @@ do
 done
 # end include processing
 
-TASK=$(${AWS_CLI} sqs receive-message --wait-time-seconds 5 --queue-url ${TASK_QUEUE_URL})
+TASK=$(${AWS_CLI} sqs receive-message --wait-time-seconds ${QUEUE_POLL_DURATION} --queue-url ${TASK_QUEUE_URL})
 
 if [ -n "${TASK}" ]
 then
