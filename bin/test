@@ -29,15 +29,5 @@ do
   fi
 done
 # end include processing
-QUEUE_MESSAGES=$(${AWS_CLI} sqs receive-message --wait-time-seconds ${QUEUE_POLL_DURATION} --queue-url ${ROUTER_QUEUE_URL} | jq ".Messages")
 
-MESSAGE_COUNT=$(echo ${QUEUE_MESSAGES} | jq "length")
-
-if [ 0 -eq ${MESSAGE_COUNT} ]
-then
-  info "no messages received from routing queue"
-  exit ${EC_INFO_NO_MESSAGES_IN_QUEUE}
-else
-  echo ${QUEUE_MESSAGE}
-  exit ${EC_OK}
-fi
+echo ${QUEUE_POLL_DURATION}

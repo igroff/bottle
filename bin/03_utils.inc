@@ -11,9 +11,9 @@ write_log(){
   LEVEL=${1}
   shift
   if [ -n "${LEVEL}" ]; then
-    echo "`date +"%x %X"` [${LEVEL}] $@";
+    echo "`date +"%x %X"` [${LEVEL}] $@" >&2;
   else
-    echo "`date +"%x %X"` $@";
+    echo "`date +"%x %X"` $@" >&2;
   fi
 }
 export -f write_log
