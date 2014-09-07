@@ -25,7 +25,7 @@ function get_message_body_from_stdin(){
 # MESSAGE_SOURCE - the 'source' value, which is required for a valid message
 ###############################################################################
 function get_message_or_die(){
-  ${MY_DIR}/get_message_body_from_stdin
+  get_message_body_from_stdin
   MESSAGE_SOURCE=$(echo "${MESSAGE_BODY}" | jq --raw-output ".source")
   [ -n "${MESSAGE_SOURCE}" -a "null" != "${MESSAGE_SOURCE}" ] || \
     die "message is invalid, contains no source value ${MESSAGE_BODY}"
@@ -34,4 +34,4 @@ function get_message_or_die(){
 
 export -f is_json_valid
 export -f get_message_or_die
-
+export -f get_message_body_from_stdin

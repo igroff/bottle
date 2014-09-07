@@ -32,8 +32,8 @@ done
 
 MESSAGE=$(${MY_DIR}/get_message_from_routing_queue)
 EXIT_CODE=$?
-[ ${EXIT_CODE} -ne ${EC_OK} ] || die ${MESSAGE} ${EXIT_CODE}
+[ ${EXIT_CODE} -eq ${EC_OK} ] || die ${MESSAGE} ${EXIT_CODE}
 
-echo ${MESSAGE} | ${MY_DIR}/notify_subscribers
+#echo ${MESSAGE} | ${MY_DIR}/notify_subscribers
 
 
