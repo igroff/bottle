@@ -1,4 +1,7 @@
 # vim: ft=sh
+MY_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export INCLUDE_LIST=${INCLUDE_LIST}
+
 export ERR_INVALID_MESSAGE=3
 
 function is_json_valid(){
@@ -22,7 +25,7 @@ function get_message_body_from_stdin(){
 # MESSAGE_SOURCE - the 'source' value, which is required for a valid message
 ###############################################################################
 function get_message_or_die(){
-  get_message_body_from_stdin
+  ${MY_DIR}/get_message_body_from_stdin
   MESSAGE_SOURCE=$(echo "${MESSAGE_BODY}" | jq --raw-output ".source")
   [ -n "${MESSAGE_SOURCE}" -a "null" != "${MESSAGE_SOURCE}" ] || \
     die "message is invalid, contains no source value ${MESSAGE_BODY}"
