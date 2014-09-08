@@ -10,7 +10,9 @@ export -f silent_popd
 write_log(){ 
   LEVEL=${1}
   shift
-  if [ -n "${LEVEL}" ]; then
+  if [ -n "${BARE_LOG}" ]; then
+    echo "$@" > &2
+  elif [ -n "${LEVEL}" ]; then
     echo "`date +"%x %X"` [${LEVEL}] $@" >&2;
   else
     echo "`date +"%x %X"` $@" >&2;
