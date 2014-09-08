@@ -41,7 +41,7 @@ then
     debug "no task messages received, nothing to do"
     exit 0
   else
-    TEMP_FILE=$(mktemp -t bottle)
+    TEMP_FILE=$(mktemp bottle-XXXXXX)
     debug ${TASK}
     echo "${TASK}" | jq --raw-output ".Messages[].Body" > ${TEMP_FILE}
     RECEIPT_HANDLE=$(echo "${TASK}" | jq --raw-output ".Messages[].ReceiptHandle")
