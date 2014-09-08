@@ -38,7 +38,7 @@ then
   if [ ${MESSAGE_COUNT} -eq 0 ]
   then
     # no messages received, nothing to do
-    debug "no task messages received, nothing to do"
+    info "no task messages received, nothing to do"
     exit 0
   else
     TEMP_FILE=$(mktemp bottle-XXXXXX)
