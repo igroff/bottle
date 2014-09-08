@@ -11,7 +11,7 @@ write_log(){
   LEVEL=${1}
   shift
   if [ -n "${BARE_LOG}" ]; then
-    echo "$@" > &2
+    echo "$@" >&2;
   elif [ -n "${LEVEL}" ]; then
     echo "`date +"%x %X"` [${LEVEL}] $@" >&2;
   else
