@@ -1,2 +1,6 @@
 #! /usr/bin/env bash
 sudo cp templates/* /etc/init
+sudo stop bottle-router
+sudo stop bottle-task-q-worker
+sudo start bottle-router
+sudo start bottle-task-q-worker
