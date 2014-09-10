@@ -31,10 +31,7 @@ done
 # end include processing
 
 NOTIFY_URL=${1?You must provide an URL to receive the message}
-# single quotes are perfectly valid JSON, but we're passing the JSON object to
-# our cli via '' quoted value, so we'll escape any single quotes
-MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
-
+get_message_body_from_stdin
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
 curl "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${MESSAGE_BODY}'

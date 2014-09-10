@@ -30,7 +30,5 @@ do
 done
 # end include processing
 
-# single quotes are perfectly valid JSON, but we're passing the JSON object to
-# our cli via '' quoted value, so we'll escape any single quotes
-MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
-eval ${AWS_CLI} sqs send-message --queue-url ${ROUTER_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'
+get_message_body_from_stdin
+send_message_to_router "${MESSAGE_BODY}"

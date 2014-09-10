@@ -34,7 +34,11 @@ function get_message_or_die(){
 
 function send_message_to_router() {
   MESSAGE=${1?You must provide a message to send to the router queue}
-
+  if [ -n "${DO_NOT_QUEUE}" ]; then
+    echo ${MESSAGE}
+  else
+    eval ${AWS_CLI} sqs send-message --queue-url ${ROUTER_QUEUE_URL} --message-body \'${MESSAGE_BODY}\'
+  fi
 }
 
 function send_message_to_task_queue(){
