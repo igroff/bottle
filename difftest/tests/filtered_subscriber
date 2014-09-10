@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+export SUBSCRIBER_REPO_DIR=`pwd`/difftest/data/subscriptions
+cat difftest/data/messages/consultation.table.update.388383.json | bin/find_notify_urls_for_message
+
