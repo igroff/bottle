@@ -1,9 +1,6 @@
 ### What?
-No idea. K, idea, somewhat incoherent.
-
-
 Given a directory structure, messages are processed, using the directory structure
-as a map for what messages will be delivered where
+as a map for what messages will be delivered where.
 
 
 #### Definitions
@@ -31,6 +28,11 @@ as a map for what messages will be delivered where
 * passing messages - this referes to 'message' as defined above in Definitions,
   when passing a message into a fuction (shell script) it will be passed in on
   stdin.
+* All messages will be passed around in their full form, implying:
+  * when sending a message it will be bare like it was created
+      {"source": "/bottle/ping"}
+  * when working with messages from the queues they will will look like whatever
+    queueing system format is forced upon them
 
 
 #### Logical Process Flow

@@ -1,4 +1,8 @@
 {
-  "source": "this/message/is/for/no/one",
-  "messageData:": {"noOne": "willGetThis"}
+  "MD5OfMessage":"this is a lie",
+  "Body":
+  {
+    "source": "this/message/is/for/no/one",
+    "messageData:": {"noOne": "willGetThis"}
+  }
 }

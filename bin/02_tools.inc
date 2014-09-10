@@ -7,15 +7,22 @@ export ERR_INVALID_MESSAGE=3
 function is_json_valid(){
   JSON=${1?You didn\'t give me anything to test}
   PARSE_RESULT=$(echo ${JSON} | jq "." 2>&1)
-  [ $? -eq 0 ] || echo ${PARSE_RESULT}
-  return $?
+  PARSE_RETURN_CODE=$?
+  echo ${PARSE_RESULT}
+  return $PARSE_RETURN_CODE
 }
 
 function get_message_body_from_stdin(){
   export FULL_MESSAGE=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
-  is_json_valid "${FULL_MESSAGE}"
+  FULL_MESSAGE=$(is_json_valid "${FULL_MESSAGE}")
   VALID_TEST=$?
-  [ ${VALID_TEST} -eq 0 ] && export FULL_MESSAGE=$(echo "${FULL_MESSAGE}" | jq --compact-output ".") 
+  if [ ${VALID_TEST} -eq 0 ]; then
+    BOTTLE_MESSAGE=$(echo "${FULL_MESSAGE}" | jq --raw-output --compact-output ".Body") 
+    [ $? -eq 0 -a "${BOTTLE_MESSAGE}" != "null" ] || die "failed to pull bottle message from message ( ${FULL_MESSAGE} )"
+    export BOTTLE_MESSAGE
+  else
+    echo "Error parsing message message ( ${FULL_MESSAGE} )"
+  fi
   return $VALID_TEST
 }
 
@@ -30,9 +37,9 @@ function get_message_or_die(){
   if [ $? -ne 0 ]; then
     die "failed getting message from stdin" ${ERR_INVALID_MESSAGE}
   fi
-  MESSAGE_SOURCE=$(echo "${FULL_MESSAGE}" | jq --raw-output ".source")
+  MESSAGE_SOURCE=$(echo "${BOTTLE_MESSAGE}" | jq --raw-output ".source")
   [ -n "${MESSAGE_SOURCE}" -a "null" != "${MESSAGE_SOURCE}" ] || \
-    die "message is invalid, contains no source value ${FULL_MESSAGE}"
+    die "message is invalid, contains no source value ( ${BOTTLE_MESSAGE} )"
   [ $? -eq 0 ] || die "message is not valid json" ${ERR_INVALID_MESSAGE}
 }
 

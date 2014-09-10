@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 # vim: ft=sh
-set -x
 ##############################################################################
 # This is a, theorectically, simple way to include other scripts ( via source )
 # in this one without having included files re-include the includes :)
@@ -35,12 +34,7 @@ NOTIFY_URLS=$(echo "${FULL_MESSAGE}" | ${MY_DIR}/find_notify_urls_for_message)
 
 for notifyUrl in "${NOTIFY_URLS}"
 do
-  if [ -n "${DO_NOT_QUEUE}" ]; then
-    echo "${notifyUrl}"
-    echo "${FULL_MESSAGE}"
-  else
-    echo "${FULL_MESSAGE}" | ${MY_DIR}/enqueue_notify_task ${notifyUrl} 
-  fi
+  echo "${FULL_MESSAGE}" | ${MY_DIR}/enqueue_notify_task ${notifyUrl} 
 done
 
 
