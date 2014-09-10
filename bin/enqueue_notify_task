@@ -34,7 +34,7 @@ NOTIFY_URL=${1?You must provide an URL to receive the message}
 get_message_body_from_stdin
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
-curl "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${MESSAGE_BODY}'
+curl "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${FULL_MESSAGE}'
 EOF
 )
 send_message_to_task_queue  "${TASK}"

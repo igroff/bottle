@@ -31,4 +31,4 @@ done
 # end include processing
 
 get_message_body_from_stdin
-send_message_to_router "${MESSAGE_BODY}"
+send_message_to_router "${FULL_MESSAGE}"
