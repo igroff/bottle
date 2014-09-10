@@ -38,6 +38,6 @@ then
   info "no messages received from routing queue"
   exit ${EC_INFO_NO_MESSAGES_IN_QUEUE}
 else
-  echo ${QUEUE_MESSAGE}
+  echo ${QUEUE_MESSAGES} | jq ".[0]"
   exit ${EC_OK}
 fi
