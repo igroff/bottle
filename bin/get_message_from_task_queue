@@ -1,0 +1,45 @@
+#! /usr/bin/env bash
+# vim: ft=sh
+
+##############################################################################
+# This is a, theorectically, simple way to include other scripts ( via source )
+# in this one without having included files re-include the includes :)
+#
+# Any files in the directory where this script is running that match *.inc
+# will be in the order returned from the expansion of *.inc, so alphabetical
+# ordering.  Thus if you wish to control the order more explicitly you can
+# name your includes 01_*.inc, 02_*.inc and so on.
+##############################################################################
+# begin include processing
+MY_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export INCLUDE_LIST=${INCLUDE_LIST}
+for include in ${MY_DIR}/*.inc
+do
+  INCLUDE_KEY=INCLUDED_${include}
+  # if we find that our include key is _not_ already in our include list
+  # we'll perform the include
+  # this is done by removing $INCLUDE_KEY from $INCLUDE_LIST and comparing
+  # the resultant to INCLUDE_LIST, if equal, nothing has been removed and thus
+  # $INCLUDE_KEY is not in $INCLUDE_LIST
+  if [ "${INCLUDE_LIST//${INCLUDE_KEY}//}" == "${INCLUDE_LIST}" ]
+  then
+    [ -n "${DEBUG}" ] && echo "including file: ${include}" >&2
+    source ${include}
+    INCLUDE_LIST=${INCLUDE_LIST}:${INCLUDE_KEY}
+  fi
+done
+# end include processing
+QUEUE_MESSAGES=$(${AWS_CLI} sqs receive-message --wait-time-seconds ${QUEUE_POLL_DURATION} --queue-url ${TASK_QUEUE_URL} | jq ".Messages")
+debug "messages"
+debug $QUEUE_MESSAGES
+MESSAGE_COUNT=$(echo ${QUEUE_MESSAGES} | jq "length")
+debug "message count ${MESSAGE_COUNT}"
+
+if [ 0 -eq ${MESSAGE_COUNT} ]
+then
+  info "no messages received from routing queue"
+  exit ${EC_INFO_NO_MESSAGES_IN_QUEUE}
+else
+  echo ${QUEUE_MESSAGES} | jq ".[]"
+  exit ${EC_OK}
+fi
