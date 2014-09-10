@@ -6,7 +6,8 @@ export ERR_INVALID_MESSAGE=3
 
 function is_json_valid(){
   JSON=${1?You didn\'t give me anything to test}
-  echo ${JSON} | jq "." > /dev/null 2>&1
+  PARSE_RESULT=$(echo ${JSON} | jq "." 2>&1)
+  [ $? -eq 0 ] || echo ${PARSE_RESULT}
   return $?
 }
 
@@ -26,6 +27,9 @@ function get_message_body_from_stdin(){
 ###############################################################################
 function get_message_or_die(){
   get_message_body_from_stdin
+  if [ $? -ne 0 ]; then
+    die "failed getting message from stdin" ${ERR_INVALID_MESSAGE}
+  fi
   MESSAGE_SOURCE=$(echo "${MESSAGE_BODY}" | jq --raw-output ".source")
   [ -n "${MESSAGE_SOURCE}" -a "null" != "${MESSAGE_SOURCE}" ] || \
     die "message is invalid, contains no source value ${MESSAGE_BODY}"

@@ -1,4 +1,4 @@
 {
-  "filter":{"CREATED_BY": 871545},
+  "match":{"CREATED_BY": 871545},
   "notifyUrl":"http://iangroffs.consultation.app/consultation/updated"
 }
