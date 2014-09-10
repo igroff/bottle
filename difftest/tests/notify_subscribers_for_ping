@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+export DO_NOT_QUEUE=true
+cat difftest/data/messages/ping.json | bin/notify_subscribers

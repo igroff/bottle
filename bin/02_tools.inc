@@ -32,6 +32,23 @@ function get_message_or_die(){
   [ $? -eq 0 ] || die "message is not valid json" ${ERR_INVALID_MESSAGE}
 }
 
+function send_message_to_router() {
+  MESSAGE=${1?You must provide a message to send to the router queue}
+
+}
+
+function send_message_to_task_queue(){
+  local TASK=${1?You must provide a message to send to the task queue}
+  if [ -n "${DO_NOT_QUEUE}" ]; then
+    echo ${TASK}
+  else
+    ${AWS_CLI} sqs send-message \
+       --queue-url ${TASK_QUEUE_URL} \
+       --message-body "${TASK}"
+  fi
+}
+
 export -f is_json_valid
 export -f get_message_or_die
 export -f get_message_body_from_stdin
+export -f send_message_to_task_queue

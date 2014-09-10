@@ -35,11 +35,9 @@ NOTIFY_URL=${1?You must provide an URL to receive the message}
 # our cli via '' quoted value, so we'll escape any single quotes
 MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
 
-TASK=$(cat <<-EOF
+TASK=$(cat <<EOF
 #! /usr/bin/env bash
 curl "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${MESSAGE_BODY}'
 EOF
 )
-${AWS_CLI} sqs send-message \
-   --queue-url ${TASK_QUEUE_URL} \
-   --message-body "${TASK}"
+send_message_to_task_queue  "${TASK}"

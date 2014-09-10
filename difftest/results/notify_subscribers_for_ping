@@ -1,0 +1,1 @@
+#! /usr/bin/env bash curl "http://services.glgresearch.com/notify/ping/receive" -H 'Content-Type: application/json' --data '{"source":"bottle/ping"}'
