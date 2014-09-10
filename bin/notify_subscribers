@@ -30,8 +30,7 @@ do
 done
 # end include processing
 
-MESSAGE_BODY=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
-
+get_message_body_from_stdin
 for notifyUrl in $(echo "${MESSAGE_BODY}" | ${MY_DIR}/find_notify_urls_for_message)
 do
   echo "${MESSAGE_BODY}" | ${MY_DIR}/enqueue_notify_task ${notifyUrl} 
