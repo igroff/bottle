@@ -1,6 +1,12 @@
 # vim: ft=sh
 MY_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+IS_MAC=false
+if [ "${OSTYPE/darwin/pants}" != "${OSTYPE}" ]; then
+  IS_MAC=true
+fi
+export IS_MAC
+
 silent_pushd(){ pushd $1 > /dev/null 2>&1; }
 export -f silent_pushd
 
@@ -48,6 +54,16 @@ abs_path() {
   (cd "${1%/*}" &>/dev/null && printf "%s/%s" "$(pwd)" "${1##*/}")
 }
 export -f abs_path
+
+makeTempFile(){
+  TEMPLATE=${1?You must provide a template name}
+  if [ "${IS_MAC}" == "true" ]; then
+    mktemp -t ${TEMPLATE}
+  else
+    mktemp --tmpdir ${TEMPLATE}
+  fi
+}
+export -f makeTempFile
 
 function abspath {
     if [[ -d "$1" ]]; then
