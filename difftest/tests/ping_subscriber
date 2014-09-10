@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+cat difftest/data/messages/ping.json | bin/find_notify_urls_for_message
+
