@@ -30,10 +30,16 @@ do
 done
 # end include processing
 
-MESSAGE=$(${MY_DIR}/get_message_from_routing_queue)
+FULL_MESSAGE=$(${MY_DIR}/get_message_from_routing_queue)
 EXIT_CODE=$?
 [ ${EXIT_CODE} -eq ${EC_OK} ] || exit ${EXIT_CODE}
 
-echo ${MESSAGE} | ${MY_DIR}/notify_subscribers
+set -e
+echo ${FULL_MESSAGE} | ${MY_DIR}/notify_subscribers
+if [ $? -eq 0 ]; then
+  RECEIPT_HANDLE=$(echo "${FULL_MESSAGE}" | ${MY_DIR}/get_receipt_handle_from_message)
+  ${MY_DIR}/delete_message_from_routing_queue ${RECEIPT_HANDLE}
+fi
+set +e
 
 
