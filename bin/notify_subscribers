@@ -32,7 +32,7 @@ get_message_body_from_stdin
 NOTIFY_URLS=$(echo "${FULL_MESSAGE}" | ${MY_DIR}/find_notify_urls_for_message)
 [ $? -eq 0 ] || die ${NOTIFY_URLS} $?
 
-for notifyUrl in "${NOTIFY_URLS}"
+for notifyUrl in ${NOTIFY_URLS}
 do
   echo "${FULL_MESSAGE}" | ${MY_DIR}/enqueue_notify_task ${notifyUrl} 
 done
