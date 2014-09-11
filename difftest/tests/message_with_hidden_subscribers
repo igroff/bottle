@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+export SUBSCRIBER_REPO_DIR=`pwd`/difftest/data/subscriptions
+cat difftest/data/messages/message_with_hidden_subscribers | bin/find_notify_urls_for_message
+

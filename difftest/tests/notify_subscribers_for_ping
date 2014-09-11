@@ -1,3 +1,4 @@
 #! /usr/bin/env bash
 export DO_NOT_QUEUE=true
+export SUBSCRIBER_REPO_DIR=`pwd`/difftest/data/subscriptions
 cat difftest/data/messages/ping.json | bin/notify_subscribers
