@@ -30,10 +30,8 @@ do
 done
 # end include processing
 QUEUE_MESSAGES=$(${AWS_CLI} sqs receive-message --wait-time-seconds ${QUEUE_POLL_DURATION} --queue-url ${TASK_QUEUE_URL} | jq ".Messages")
-debug "messages"
-debug $QUEUE_MESSAGES
+
 MESSAGE_COUNT=$(echo ${QUEUE_MESSAGES} | jq "length")
-debug "message count ${MESSAGE_COUNT}"
 
 if [ 0 -eq ${MESSAGE_COUNT} ]
 then
