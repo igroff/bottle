@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-sudo cp templates/* /etc/init
+sudo cp -R overlay/ /
 sudo stop bottle-router
 sudo stop bottle-task-q-worker
 sudo start bottle-router
