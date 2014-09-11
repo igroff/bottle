@@ -35,16 +35,16 @@ export -f hash_file
 log_divider() { write_log "******************************************"; }
 export -f log_divider
 
-error() { write_log ${FUNCNAME^^} $@; }
+error() { write_log ${FUNCNAME^^} "$@"; }
 export -f error
 
-warn()  { write_log ${FUNCNAME^^} $@; }
+warn()  { write_log ${FUNCNAME^^} "$@"; }
 export -f warn
 
-info()  { write_log ${FUNCNAME^^} $@; }
+info()  { write_log ${FUNCNAME^^} "$@"; }
 export -f info
 
-debug() { [ -n "${DEBUG}" ] && write_log ${FUNCNAME^^} $@; }
+debug() { [ -n "${DEBUG}" ] && write_log ${FUNCNAME^^} "$@"; }
 export -f debug
 
 die() { echo $1 ; exit ${2-1} ;}
@@ -55,7 +55,7 @@ abs_path() {
 }
 export -f abs_path
 
-makeTempFile(){
+make_temp_file(){
   TEMPLATE=${1?You must provide a template name}
   if [ "${IS_MAC}" == "true" ]; then
     mktemp -t ${TEMPLATE}
@@ -63,7 +63,7 @@ makeTempFile(){
     mktemp --tmpdir ${TEMPLATE}
   fi
 }
-export -f makeTempFile
+export -f make_temp_file
 
 function abspath {
     if [[ -d "$1" ]]; then

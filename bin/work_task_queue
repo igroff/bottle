@@ -41,13 +41,20 @@ then
     info "no task messages received, nothing to do"
     exit 0
   else
-    TEMP_FILE=$(makeTempFile bottle-XXXXXX)
-    debug ${TASK}
+    TEMP_FILE=$(make_temp_file bottle-XXXXXX)
+    function cleanup_on_exit(){
+      rm -rf ${TEMP_FILE}
+    }
+    trap cleanup_on_exit EXIT
     echo "${TASK}" | jq --raw-output ".Messages[].Body" > ${TEMP_FILE}
     RECEIPT_HANDLE=$(echo "${TASK}" | jq --raw-output ".Messages[].ReceiptHandle")
     chmod +x ${TEMP_FILE}
     debug "task saved as ${TEMP_FILE}"
+    debug "$(cat ${TEMP_FILE})"
+    info 'begin output from task execution ***********************************'
     ${TEMP_FILE}
+    echo 
+    info 'end output from task execution   ***********************************'
     TASK_RESULT=$?
     if [ $TASK_RESULT -ne 0 ]
     then
