@@ -1,6 +1,6 @@
 ### What?
 It's a bottle: you put messages in it and other people will get them.
-
+ 
 #### Really?
 Bottle is a simply system by which subscribers can be notified of messages. The
 system guarantees that a message will be sent to a subscriber at least once, in
