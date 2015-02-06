@@ -34,7 +34,13 @@ NOTIFY_URL=${1?You must provide an URL to receive the message}
 get_message_body_from_stdin
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
-curl "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${BOTTLE_MESSAGE}'
+curl -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${BOTTLE_MESSAGE}'
+SEND_RESULT=$?
+if [ ${SEND_RESULT} -ne 0 ]; then
+  if [ -n "${PUSH_ERROR_NOTIFY_URL}" ]; then
+    curl -S "${PUSH_ERROR_NOTIFY_URL} -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
+  fi
+fi
 EOF
 )
 send_message_to_task_queue  "${TASK}"
