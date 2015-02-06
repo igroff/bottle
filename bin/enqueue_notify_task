@@ -31,14 +31,20 @@ done
 # end include processing
 
 NOTIFY_URL=${1?You must provide an URL to receive the message}
-get_message_body_from_stdin
+get_message_or_die
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
 curl -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${BOTTLE_MESSAGE}'
 SEND_RESULT=$?
 if [ ${SEND_RESULT} -ne 0 ]; then
   if [ -n "${PUSH_ERROR_NOTIFY_URL}" ]; then
-    curl -S "${PUSH_ERROR_NOTIFY_URL} -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
+    if printf "${MESSAGE_SOURCE}" | grep -E 'bottle\/push\/error'; then
+      # if the message we failed to push is the message indicating a failure to push, we 
+      # MUST NOT SEND IT, lest we DoS ourselves
+      :
+    else
+      curl -S "${PUSH_ERROR_NOTIFY_URL} -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
+    fi
   fi
 fi
 EOF
