@@ -36,14 +36,14 @@ TASK=$(cat <<EOF
 #! /usr/bin/env bash
 curl -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data '${BOTTLE_MESSAGE}'
 SEND_RESULT=$?
-if [ ${SEND_RESULT} -ne 0 ]; then
+if [ \${SEND_RESULT} -ne 0 ]; then
   if [ -n "${PUSH_ERROR_NOTIFY_URL}" ]; then
     if printf "${MESSAGE_SOURCE}" | grep -E 'bottle\/push\/error'; then
       # if the message we failed to push is the message indicating a failure to push, we 
       # MUST NOT SEND IT, lest we DoS ourselves
       :
     else
-      curl -S "${PUSH_ERROR_NOTIFY_URL} -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
+      curl -S "${PUSH_ERROR_NOTIFY_URL}" -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
     fi
   fi
 fi
