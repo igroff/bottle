@@ -30,7 +30,8 @@ done
 # end include processing
 get_message_body_from_stdin
 NOTIFY_URLS=$(echo "${FULL_MESSAGE}" | ${MY_DIR}/find_notify_urls_for_message)
-[ $? -eq 0 ] || die ${NOTIFY_URLS} $?
+NOTIFY_EXIT_CODE=$?
+[ ${NOTIFY_EXIT_CODE} -eq 0 ] || die ${NOTIFY_URLS} ${NOTIFY_EXIT_CODE}
 
 for notifyUrl in ${NOTIFY_URLS}
 do
