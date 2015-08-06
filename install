@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+
+if [ $(id -u) != 0 ]
+then
+ echo "needs to be run as root"
+ exit 1
+fi
+INSTALLATION_USER=${1?You need to provide the user for which we will be installing}
+
+
+for file_path in $(find ./overlay -type f)
+do
+  file_name=$(basename $file_path)
+  dir_name=$(dirname $file_path)
+  dest_path=${dir_name/.\/overlay\///}/${file_name}
+  printf "processing overlay path %s to %s\n" $file_path $dest_path
+  #cat $file_path | sed -r -e "#[\{\{user\}\}[${INSTALLATION_USER}[g" > ${dest_path}
+done
