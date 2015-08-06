@@ -1,6 +1,3 @@
 #! /usr/bin/env bash
 sudo cp -R overlay/ /
-sudo stop bottle-router
-sudo stop bottle-task-q-worker
-sudo start bottle-router
-sudo start bottle-task-q-worker
+sudo ./install ubuntu
