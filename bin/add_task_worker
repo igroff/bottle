@@ -1,0 +1,12 @@
+#! /usr/bin/env bash
+if [ $(id -u) != 0 ]
+then
+ echo "needs to be run as root"
+ exit 1
+fi
+
+sleep 1
+ID=$(date +"%s")
+start bottle-task-worker name=$ID
+
+
