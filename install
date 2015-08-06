@@ -14,5 +14,5 @@ do
   dir_name=$(dirname $file_path)
   dest_path=${dir_name/.\/overlay\///}/${file_name}
   printf "processing overlay path %s to %s\n" $file_path $dest_path
-  #cat $file_path | sed -r -e "#[\{\{user\}\}[${INSTALLATION_USER}[g" > ${dest_path}
+  cat $file_path | sed -r -e "#[\{\{user\}\}[${INSTALLATION_USER}[g"# > ${dest_path}
 done
