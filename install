@@ -7,6 +7,7 @@ then
 fi
 INSTALLATION_USER=${1?You need to provide the user for which we will be installing}
 
+stop bottle > /dev/null 2>&1 || true
 
 for file_path in $(find ./overlay -type f)
 do
