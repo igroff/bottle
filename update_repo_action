@@ -1,3 +1,4 @@
 #! /usr/bin/env bash
 sudo cp -R overlay/ /
 sudo ./install ubuntu
+start bottle
