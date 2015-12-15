@@ -1,4 +1,8 @@
 # vim: ft=sh
+# allow a machine level configuration in the expected manner
+[ -r /etc/bottle ] && source /etc/bottle
+# allow for override at the user level as bottle runs as
+# a specific user
 [ -r ~/.bottle.env ] && source ~/.bottle.env
 
 export SUBSCRIBER_REPO_DIR=${SUBSCRIBER_REPO_DIR?Missing subscriber repo dir, halting}
