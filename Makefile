@@ -15,6 +15,7 @@ install:
 	sudo bash -c 'cat $(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3) >> /etc/bottle'
 	# the upstart scripts expect the app to live at ~/bottle
 	ln -s /home/ubuntu/app ~/bottle
+	sudo initctl reload-configuration
 
 start:
-	# all the start stuff is handled by upstart
+	sudo start bottle
