@@ -5,7 +5,7 @@ build:
 
 install:
 	# yup, starphleet is gonna run us as ubuntu
-	./install ubuntu
+	sudo ./install ubuntu
 
 start:
 	# we'll pick up our environment from our starphleet ship level configuration
