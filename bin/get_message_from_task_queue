@@ -35,7 +35,7 @@ MESSAGE_COUNT=$(echo ${QUEUE_MESSAGES} | jq "length")
 
 if [ 0 -eq ${MESSAGE_COUNT} ]
 then
-  info "no messages received from routing queue"
+  debug "no messages received from task queue"
   exit ${EC_INFO_NO_MESSAGES_IN_QUEUE}
 else
   echo ${QUEUE_MESSAGES} | jq ".[]"
