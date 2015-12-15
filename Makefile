@@ -15,8 +15,6 @@ install:
 	sudo bash -c 'cat $(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3) >> /etc/bottle'
 	# the upstart scripts expect the app to live at ~/bottle
 	ln -s /home/ubuntu/app ~/bottle
-	# now when bottle runs it can get then environment info we've gathered together above
-	sudo start bottle
 
 start:
-	# unpublished, it doesn't start
+	# all the start stuff is handled by upstart
