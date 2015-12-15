@@ -137,5 +137,3 @@ imply anything about the true location of the subscription repository.
 * `perform_task`
 * `archive_completed_task`
 * `delete_message_from_task_queue`
-
-

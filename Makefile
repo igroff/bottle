@@ -1,7 +1,7 @@
 .PHONY: build install start
 
 build:
-	sudo apt-get update
+	sudo apt-get update || true # we can have some non fatal errors here
 	sudo apt-get install jq awscli --assume-yes
 
 install:
