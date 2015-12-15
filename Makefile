@@ -1,7 +1,8 @@
 .PHONY: build install start
 
 build:
-	# do nothing, because there is no build
+	sudo apt-get update
+	sudo apt-get install jq awscli --assume-yes
 
 install:
 	# yup, starphleet is gonna run us as ubuntu
