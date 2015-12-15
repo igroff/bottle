@@ -6,8 +6,6 @@ build:
 install:
 	# yup, starphleet is gonna run us as ubuntu
 	sudo ./install ubuntu
-
-start:
 	# we'll pick up our environment from our starphleet ship level configuration
 	sudo cat /etc/starphleet.d/* > /etc/bottle
 	# and we can get anything we might need from our orders which should
@@ -16,3 +14,6 @@ start:
 	sudo cat $(cat /home/ubuntu/start | grep container_environment | cut -d ' ' -f 3) >> /etc/bottle
 	# now when bottle runs it can get then environment info we've gathered together above
 	sudo start bottle
+
+start:
+	# unpublished, it doesn't start
