@@ -18,6 +18,9 @@ start:
 	# and we can get anything we might need from our orders which should
 	# be the 3rd space delimited field of the 'container_environment' line from
 	# our /home/ubuntu/start file, yup super dependent on starphleet structure
-	sudo bash -c 'cat $$(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3) >> /etc/bottle'
+	# 
+	# just to keep things clean, we'll filter out the autodeploy directive so we 
+	# don't get extraneous errors
+	sudo bash -c 'cat $$(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3 |  grep -v -e "^autodeploy.*") >> /etc/bottle'
 	sudo start bottle
 	exec sleep 9999999
