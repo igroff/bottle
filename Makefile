@@ -16,6 +16,7 @@ install:
 	# the upstart scripts expect the app to live at ~/bottle
 	ln -s /home/ubuntu/app ~/bottle
 	sudo initctl reload-configuration
+	sudo start bottle
 
 start:
-	sudo start bottle
+	# lifecycle, it's hard
