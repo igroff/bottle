@@ -23,4 +23,9 @@ start:
 	# don't get extraneous errors
 	sudo bash -c 'cat $$(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3 ) | grep -v -e "^autodeploy.*" >> /etc/bottle'
 	sudo start bottle
+	# now for a couple extra workers, as this is what we run traditionally
+	sudo start bottle-router name=router1
+	sudo start bottle-router name=router2
+	sudo start bottle-task-worker name=task_worker1
+	sudo start bottle-task-worker name=task_worker2
 	exec sleep 9999999
