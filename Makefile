@@ -20,3 +20,4 @@ start:
 	# our /home/ubuntu/start file, yup super dependent on starphleet structure
 	sudo bash -c 'cat $(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3) >> /etc/bottle'
 	sudo start bottle
+	exec sleep 9999999
