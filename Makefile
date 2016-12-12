@@ -28,4 +28,6 @@ start:
 	sudo start bottle-router name=router2
 	sudo start bottle-task-worker name=task_worker1
 	sudo start bottle-task-worker name=task_worker2
-	exec sleep 9999999
+	sudo start bottle-task-worker name=task_worker3
+	sudo start bottle-task-worker name=task_worker4
+	exec sleep 99999999
