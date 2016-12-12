@@ -35,7 +35,7 @@ get_message_or_die
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
 set -e
-curl -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${BOTTLE_MESSAGE}'
+curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${BOTTLE_MESSAGE}'
 SEND_RESULT=$?
 if [ \${SEND_RESULT} -ne 0 ]; then
   if [ -n "${PUSH_ERROR_NOTIFY_URL}" ]; then
@@ -44,7 +44,7 @@ if [ \${SEND_RESULT} -ne 0 ]; then
       # MUST NOT SEND IT, lest we DoS ourselves
       :
     else
-      curl -s -S "${PUSH_ERROR_NOTIFY_URL}" -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
+      curl --connect-timeout 1 -s -S "${PUSH_ERROR_NOTIFY_URL}" -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
     fi
   fi
 fi
