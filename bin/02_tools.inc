@@ -55,7 +55,7 @@ function send_message_to_router() {
 function send_message_to_task_queue(){
   local TASK=${1?You must provide a message to send to the task queue}
   if [ -n "${DO_NOT_QUEUE}" ]; then
-    echo ${TASK}
+    echo "${TASK}"
   else
     ${AWS_CLI} sqs send-message \
        --queue-url ${TASK_QUEUE_URL} \

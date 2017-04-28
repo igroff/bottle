@@ -35,9 +35,9 @@ get_message_or_die
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
 set -e
-curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${BOTTLE_MESSAGE}'
-SEND_RESULT=$?
-if [ \${SEND_RESULT} -ne 0 ]; then
+HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${BOTTLE_MESSAGE}' --write-out '%{http_code}' -o /dev/null)"
+SEND_RESULT=\$?
+if [ \${SEND_RESULT} -ne 0  -o \${HTTP_STATUS} -ne 200 ]; then
   if [ -n "${PUSH_ERROR_NOTIFY_URL}" ]; then
     if printf "${MESSAGE_SOURCE}" | grep -E 'bottle\/push\/error'; then
       # if the message we failed to push is the message indicating a failure to push, we 
@@ -47,6 +47,7 @@ if [ \${SEND_RESULT} -ne 0 ]; then
       curl --connect-timeout 1 -s -S "${PUSH_ERROR_NOTIFY_URL}" -H 'Content-Type: application/json' --data '{"source":"bottle/push/error","notifyUrl":"${NOTIFY_URL}"}'
     fi
   fi
+  exit 1
 fi
 EOF
 )
