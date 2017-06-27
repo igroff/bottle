@@ -32,10 +32,13 @@ done
 
 NOTIFY_URL=${1?You must provide an URL to receive the message}
 get_message_or_die
+# we need to escape our 's because we're going to pass this message into curl on the command line, and we'll
+# be delimiting it with 's, so we need any 's in the message to be escaped accordingly
+ESCAPED_MESSAGE=$(echo "${BOTTLE_MESSAGE}" | sed -E -e $'s/\'/\'\\\\\'\'/g')
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
 set -e
-HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${BOTTLE_MESSAGE}' --write-out '%{http_code}' -o /dev/null)"
+HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${ESCAPED_MESSAGE}' --write-out '%{http_code}' -o /dev/null)"
 SEND_RESULT=\$?
 if [ \${SEND_RESULT} -ne 0  -o \${HTTP_STATUS} -ne 200 ]; then
   if [ -n "${PUSH_ERROR_NOTIFY_URL}" ]; then
