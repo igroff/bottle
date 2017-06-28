@@ -38,12 +38,8 @@ ESCAPED_MESSAGE=$(echo "${BOTTLE_MESSAGE}" | sed -E -e $'s/\'/\'\\\\\'\'/g')
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
 set -e
-CURL_OUTPUT_FILE=$(mktemp)
-trap "rm -f \${CURL_OUTPUT_FILE}" EXIT
-HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${ESCAPED_MESSAGE}' --write-out '%{http_code}' -o '\${CURL_OUTPUT_FILE})"
+HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${ESCAPED_MESSAGE}' --write-out '%{http_code}' -o /dev/null)"
 SEND_RESULT=\$?
-# output the result of our curl, regardless of the result
-cat \${CURL_OUTPUT_FILE}
 if [ \${SEND_RESULT} -ne 0  -o \${HTTP_STATUS} -ne 200 ]; then
   if [ -n "${PUSH_ERROR_NOTIFY_URL}" ]; then
     if printf "${MESSAGE_SOURCE}" | grep -E 'bottle\/push\/error'; then
