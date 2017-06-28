@@ -38,7 +38,7 @@ ESCAPED_MESSAGE=$(echo "${BOTTLE_MESSAGE}" | sed -E -e $'s/\'/\'\\\\\'\'/g')
 TASK=$(cat <<EOF
 #! /usr/bin/env bash
 set -e
-CURL_OUTPUT_FILE=$(mktemp)
+CURL_OUTPUT_FILE=\$(mktemp)
 trap "rm -f \${CURL_OUTPUT_FILE}" EXIT
 HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${ESCAPED_MESSAGE}' --write-out '%{http_code}' -o "\${CURL_OUTPUT_FILE}")"
 SEND_RESULT=\$?
