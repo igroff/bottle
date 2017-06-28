@@ -40,7 +40,7 @@ TASK=$(cat <<EOF
 set -e
 CURL_OUTPUT_FILE=$(mktemp)
 trap "rm -f \${CURL_OUTPUT_FILE}" EXIT
-HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${ESCAPED_MESSAGE}' --write-out '%{http_code}' -o '\${CURL_OUTPUT_FILE})"
+HTTP_STATUS="\$(curl --connect-timeout 1 -s -S "${NOTIFY_URL}" -H 'Content-Type: application/json' --data-binary '${ESCAPED_MESSAGE}' --write-out '%{http_code}' -o '\${CURL_OUTPUT_FILE}')"
 SEND_RESULT=\$?
 # output the result of our curl, regardless of the result
 cat \${CURL_OUTPUT_FILE}
