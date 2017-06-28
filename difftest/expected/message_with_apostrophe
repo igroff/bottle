@@ -1,7 +1,11 @@
 #! /usr/bin/env bash
 set -e
-HTTP_STATUS="$(curl --connect-timeout 1 -s -S "http://services.glgresearch.com/notify/ping/receive" -H 'Content-Type: application/json' --data-binary '{"source":"bottle/ping", "tasks":"I'\''m"}' --write-out '%{http_code}' -o /dev/null)"
+CURL_OUTPUT_FILE=$(mktemp)
+trap "rm -f ${CURL_OUTPUT_FILE}" EXIT
+HTTP_STATUS="$(curl --connect-timeout 1 -s -S "http://services.glgresearch.com/notify/ping/receive" -H 'Content-Type: application/json' --data-binary '{"source":"bottle/ping", "tasks":"I'\''m"}' --write-out '%{http_code}' -o "${CURL_OUTPUT_FILE}")"
 SEND_RESULT=$?
+# output the result of our curl, regardless of the result
+cat ${CURL_OUTPUT_FILE}
 if [ ${SEND_RESULT} -ne 0  -o ${HTTP_STATUS} -ne 200 ]; then
   if [ -n "https://services.glgresearch.com/notify/send" ]; then
     if printf "bottle/ping" | grep -E 'bottle\/push\/error'; then
