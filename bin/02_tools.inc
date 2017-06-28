@@ -13,7 +13,7 @@ function is_json_valid(){
 }
 
 function get_message_body_from_stdin(){
-  export FULL_MESSAGE=$(cat | sed -E -e $'s/\'/\'\\\\\'\'/g')
+  export FULL_MESSAGE=$(cat)
   FULL_MESSAGE=$(is_json_valid "${FULL_MESSAGE}")
   VALID_TEST=$?
   if [ ${VALID_TEST} -eq 0 ]; then
