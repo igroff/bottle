@@ -12,8 +12,6 @@ install:
 	# the upstart scripts expect the app to live at ~/bottle
 	ln -s /home/ubuntu/app ~/bottle
 	sudo initctl reload-configuration
-
-start:
 	# we don't have our 'start' file created until, well, now.
 	# and we can get anything we might need from our orders which should
 	# be the 3rd space delimited field of the 'container_environment' line from
@@ -21,7 +19,7 @@ start:
 	# 
 	# just to keep things clean, we'll filter out the autodeploy directive so we 
 	# don't get extraneous errors
-	sudo bash -c 'cat $$(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3 ) | grep -v -e "^autodeploy.*" >> /etc/bottle'
+	sudo bash -c 'cat $$(cat /build_script | grep builder | cut -f 2 -d " ") >> /etc/bottle'
 	sudo start bottle
 	# now for a couple extra workers, as this is what we run traditionally
 	sudo start bottle-router name=router1
@@ -30,4 +28,3 @@ start:
 	sudo start bottle-task-worker name=task_worker2
 	sudo start bottle-task-worker name=task_worker3
 	sudo start bottle-task-worker name=task_worker4
-	exec sleep 99999999
