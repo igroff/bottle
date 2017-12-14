@@ -19,7 +19,7 @@ install:
 	# 
 	# just to keep things clean, we'll filter out the autodeploy directive so we 
 	# don't get extraneous errors
-	sudo bash -c 'cat $$(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3 ) | grep -v -e "^autodeploy.*" >> /etc/bottle'
+	sudo bash -c 'cat $$(cat /build_script | grep builder | cut -f 2 -d " ") >> /etc/bottle'
 	sudo start bottle
 	# now for a couple extra workers, as this is what we run traditionally
 	sudo start bottle-router name=router1
