@@ -12,8 +12,6 @@ install:
 	# the upstart scripts expect the app to live at ~/bottle
 	ln -s /home/ubuntu/app ~/bottle
 	sudo initctl reload-configuration
-
-start:
 	# we don't have our 'start' file created until, well, now.
 	# and we can get anything we might need from our orders which should
 	# be the 3rd space delimited field of the 'container_environment' line from
@@ -30,4 +28,3 @@ start:
 	sudo start bottle-task-worker name=task_worker2
 	sudo start bottle-task-worker name=task_worker3
 	sudo start bottle-task-worker name=task_worker4
-	exec sleep 99999999
