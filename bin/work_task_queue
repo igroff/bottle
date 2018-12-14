@@ -51,11 +51,11 @@ then
     chmod +x ${TEMP_FILE}
     debug "task saved as ${TEMP_FILE}"
     debug "$(cat ${TEMP_FILE})"
-    info 'begin output from task execution ***********************************'
+    debug 'output_start from task execution'
     ${TEMP_FILE}
     TASK_RESULT=$?
     echo 
-    info 'end output from task execution   ***********************************'
+    debug 'output_end from task execution'
     if [ $TASK_RESULT -ne 0 ]
     then
       error "failure during task processing, will try again"
