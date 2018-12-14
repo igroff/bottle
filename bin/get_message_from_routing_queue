@@ -33,7 +33,7 @@ QUEUE_MESSAGES=$(${AWS_CLI} sqs receive-message --wait-time-seconds ${QUEUE_POLL
 
 MESSAGE_COUNT=$(echo ${QUEUE_MESSAGES} | jq "length")
 
-if [ 0 -eq ${MESSAGE_COUNT} ]
+if [[ -n ${QUEUE_MESSAGES} || 0 -eq ${MESSAGE_COUNT} ]]
 then
   info "no messages received from routing queue"
   exit ${EC_INFO_NO_MESSAGES_IN_QUEUE}
