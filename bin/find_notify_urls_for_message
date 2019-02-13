@@ -50,7 +50,7 @@ do
     debug "using filter ${FILTER}"
     # if the subscriber has provided a filter, it must match or we will not
     # send the message to the subscriber
-    CONTAINS=$(echo "${BOTTLE_MESSAGE}" | jq ".messageData | contains(${FILTER})")
+    CONTAINS=$(echo "${BOTTLE_MESSAGE}" | jq ". | contains(${FILTER})")
     if [ "true" == "${CONTAINS}" ]; then
       # filter matches
       SEND_MESSAGE=true
