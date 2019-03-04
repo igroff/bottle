@@ -2,7 +2,7 @@
 # vim: ft=sh
 
 ##############################################################################
-# This is where all the action takes place, an inbound message is 
+# This is where all the action takes place, an inbound message is
 # compared to our message routing rules and a series of notification
 # tasks is enqueued in the 'task' queue
 ##############################################################################
@@ -50,7 +50,7 @@ do
     debug "using filter ${FILTER}"
     # if the subscriber has provided a filter, it must match or we will not
     # send the message to the subscriber
-    CONTAINS=$(echo "${BOTTLE_MESSAGE}" | jq ".messageData | contains(${FILTER})")
+    CONTAINS=$(echo "${BOTTLE_MESSAGE}" | jq ". | contains(${FILTER})")
     if [ "true" == "${CONTAINS}" ]; then
       # filter matches
       SEND_MESSAGE=true
