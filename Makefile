@@ -22,12 +22,12 @@ start:
 	# just to keep things clean, we'll filter out the autodeploy directive so we 
 	# don't get extraneous errors
 	sudo bash -c 'cat $$(cat /home/ubuntu/start | grep container_environment | cut -d " " -f 3 ) | grep -v -e "^autodeploy.*" >> /etc/bottle'
-	sudo start bottle
+	sudo start bottle || true
 	# now for a couple extra workers, as this is what we run traditionally
-	sudo start bottle-router name=router1
-	sudo start bottle-router name=router2
-	sudo start bottle-task-worker name=task_worker1
-	sudo start bottle-task-worker name=task_worker2
-	sudo start bottle-task-worker name=task_worker3
-	sudo start bottle-task-worker name=task_worker4
+	sudo start bottle-router name=router1 || true
+	sudo start bottle-router name=router2 || true
+	sudo start bottle-task-worker name=task_worker1 || true
+	sudo start bottle-task-worker name=task_worker2 || true
+	sudo start bottle-task-worker name=task_worker3 || true
+	sudo start bottle-task-worker name=task_worker4 || true
 	exec sleep 99999999
