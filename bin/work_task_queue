@@ -59,6 +59,7 @@ then
     if [ $TASK_RESULT -ne 0 ]
     then
       error "failure during task processing, will try again"
+      error "$(cat ${TEMP_FILE})"
     else
       ${MY_DIR}/delete_message_from_task_queue "${RECEIPT_HANDLE}"
     fi
