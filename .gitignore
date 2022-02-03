@@ -1,2 +1,3 @@
 *.swp
 difftest/results/
+env/
